@@ -1,0 +1,1 @@
+export {MEIParser} from './parser';
