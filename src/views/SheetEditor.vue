@@ -155,8 +155,11 @@
         }
         private droppedFiles(event: DragEvent) {
             event.preventDefault();
-            if (event.dataTransfer.items) {
-                for (const item of event.dataTransfer.items) {
+
+            const dataTransfer = event.dataTransfer as DataTransfer;
+
+            if (dataTransfer.items) {
+                for (const item of dataTransfer.items) {
                     // the compiler does seem to think item is of type File
                     // directly casting to DataTransferItem does not work either
                     const dataTransferItem = (item as any);
@@ -165,7 +168,7 @@
                     }
                 }
             } else {
-                for (const file of event.dataTransfer.files) {
+                for (const file of dataTransfer.files) {
                     this.handleFile(file);
                 }
             }

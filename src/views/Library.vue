@@ -126,13 +126,15 @@ export default class Library extends Vue {
   }
 
   private dragStart($event: DragEvent, source: Source) {
-      $event.dataTransfer.setData('id', source.id.toString());
-      $event.dataTransfer.setData('type', source.type);
-      $event.dataTransfer.effectAllowed = 'copy';
+      const dataTransfer = $event.dataTransfer as DataTransfer;
+      dataTransfer.setData('id', source.id.toString());
+      dataTransfer.setData('type', source.type);
+      dataTransfer.effectAllowed = 'copy';
   }
 
   private dragOver($event: DragEvent) {
-      $event.dataTransfer.dropEffect = 'copy';
+      const dataTransfer = $event.dataTransfer as DataTransfer;
+      dataTransfer.dropEffect = 'copy';
       $event.preventDefault();
   }
 
