@@ -1,7 +1,6 @@
 {
   "name": "zenmem-frontend-vue",
   "version": "0.1.0",
-  "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -10,9 +9,9 @@
     "test:e2e": "vue-cli-service test:e2e"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.4",
-    "@fortawesome/free-solid-svg-icons": "^5.3.1",
-    "@fortawesome/vue-fontawesome": "^0.1.1",
+    "@fortawesome/fontawesome-svg-core": "^1.2.27",
+    "@fortawesome/free-solid-svg-icons": "^5.12.1",
+    "@fortawesome/vue-fontawesome": "^0.1.9",
     "axios": "^0.18.0",
     "bootstrap": "^4.1.3",
     "openseadragon": "^2.4.0",
@@ -35,7 +34,7 @@
     "@vue/cli-service": "^3.0.3",
     "@vue/test-utils": "^1.0.0-beta.25",
     "chai": "^4.1.2",
-    "node-sass": "^4.9.0",
+    "node-sass": "4.12.0",
     "sass-loader": "^7.0.1",
     "typescript": "^3.0.3",
     "vue-template-compiler": "^2.5.17",
