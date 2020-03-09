@@ -12,13 +12,13 @@
         <router-link to="/measure-editor">
           <fa-icon icon="edit" size="2x"></fa-icon>
         </router-link>
+        <!--
         <router-link to="/concordance-editor">
           <fa-icon icon="random" size="2x"></fa-icon>
         </router-link>
         <router-link to="/annotations">
           <fa-icon icon="comment-alt" size="2x"></fa-icon>
         </router-link>
-        <!--
         <router-link to="/export">
           <fa-icon icon="file-export" size="2x"></fa-icon>
         </router-link>
