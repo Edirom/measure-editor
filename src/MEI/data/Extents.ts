@@ -1,10 +1,10 @@
 export class Extents {
     public static fromAttributes(attributes: {[key: string]: string}): Extents | undefined {
         if (
-            !attributes.hasOwnProperty('ulx') ||
-            !attributes.hasOwnProperty('uly') ||
-            !attributes.hasOwnProperty('lrx') ||
-            !attributes.hasOwnProperty('lry')
+            !Object.hasOwnProperty.call(attributes, 'ulx') ||
+            !Object.hasOwnProperty.call(attributes, 'uly') ||
+            !Object.hasOwnProperty.call(attributes, 'lrx') ||
+            !Object.hasOwnProperty.call(attributes, 'lry')
         ) {
             return undefined;
         }

@@ -5,32 +5,6 @@
                 <div class="d-flex justify-content-between flex-column h-100">
                     <div class="d-flex justify-content-start w-100 flex-column">
                         <pane-headline>Optionen</pane-headline>
-                        <!-- <div class="toolbar-element">
-                            <div class="btn-group-vertical btn-group-toggle w-100" data-toggle="buttons">
-                                <label class="btn btn-outline-primary" :class="mode === 'tact' ? 'active' : ''">
-                                    <input type="radio" name="mode" v-model="mode" :value="'tact'"/> Takte / Abschnitte
-                                </label>
-                                <label class="btn btn-outline-primary" :class="mode === 'instruments' ? 'active' : ''">
-                                    <input type="radio" name="mode" v-model="mode" :value="'instruments'" disabled/> Instrumente
-                                </label>
-                            </div>
-                        </div>
-                        <div class="toolbar-element">
-                            <div class="btn-group-vertical btn-group-toggle w-100" data-toggle="buttons">
-                                <label class="btn btn-outline-primary" :class="rectMode === 'ortho' ? 'active' : ''">
-                                    <input type="radio" name="rectMode" v-model="rectMode" :value="'ortho'"/>
-                                    Orthogonale Rechtecke
-                                </label>
-                                <label class="btn btn-outline-primary" :class="rectMode === 'rect' ? 'active' : ''">
-                                    <input type="radio" name="rectMode" v-model="rectMode" :value="'rect'"/> Gedrehte
-                                    Rechtecke
-                                </label>
-                                <label class="btn btn-outline-primary" :class="rectMode === 'poly' ? 'active' : ''">
-                                    <input type="radio" name="rectMode" v-model="rectMode" :value="'poly'"/> Polygone
-                                </label>
-                            </div>
-                        </div>
-                         -->
                         <div class="toolbar-element">
                             <toolbar ref="toolbar"
                                      :staticElements="staticElements"
@@ -163,7 +137,7 @@
             Toolbar,
         },
     })
-    export default class MeasureEditor extends Vue {
+    export default class Editor extends Vue {
         public $refs!: {
             toolbar: Toolbar,
         };

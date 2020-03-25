@@ -12,7 +12,7 @@ export class SheetStore implements StoreType<RootState> {
         sheets(state): { [id: number]: Sheet } {
             const converted: { [id: string]: Sheet } = {};
             for (const id in state._sheets) {
-                if (state._sheets.hasOwnProperty(id)) {
+                if (Object.hasOwnProperty.call(state._sheets, id)) {
                     converted[id] = StoreSheet.createSheet(state._sheets[id], state);
                 }
             }
@@ -22,7 +22,7 @@ export class SheetStore implements StoreType<RootState> {
             return (ids: number[]) => {
                 const foundSheets: StoreSheet[] = [];
                 for (const id of ids) {
-                    if (state._sheets.hasOwnProperty(id)) {
+                    if (Object.hasOwnProperty.call(state._sheets, id)) {
                         foundSheets.push(state._sheets[id]);
                     }
                 }
@@ -40,16 +40,6 @@ export class SheetStore implements StoreType<RootState> {
         modifySheet(state: RootState, sheet: Sheet) {
             StateMutator.stateDelete<StoreSheet>(state._sheets, sheet.id);
             StateMutator.stateAdd<StoreSheet>(state._sheets, sheet.id, new StoreSheet(sheet));
-        },
-        addSheetToWork(state: RootState, data: WorkSource) {
-            state._works[data.workId].sheets =
-                state._works[data.workId].sheets.slice().concat([data.source.id]);
-        },
-        removeSheetFromWork(state: RootState, data: WorkSource) {
-            const clone = state._works[data.workId].sheets.slice();
-            if (StateMutator.removeFromArray<string>(clone, ((s) => s === data.source.id))) {
-                state._works[data.workId].sheets = clone;
-            }
         },
     };
     public actions: ActionTree<RootState, RootState> = {
