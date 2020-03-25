@@ -17,7 +17,7 @@ export class ImageStore implements StoreType<RootState> {
         images(state): { [id: string]: Image } {
             const converted: { [id: string]: Image } = {};
             for (const id in state._images) {
-                if (state._images.hasOwnProperty(id)) {
+                if (Object.hasOwnProperty.call(state._images, id)) {
                     converted[id] = StoreImage.createImage(state._images[id], state);
                 }
             }
@@ -32,28 +32,20 @@ export class ImageStore implements StoreType<RootState> {
             StateMutator.stateDelete<StoreImage>(state._images, image.id);
         },
         addImageToSheet(state, data: SheetImage) {
-            if (state._sheets.hasOwnProperty(data.sheetId) && state._images.hasOwnProperty(data.image.id)) {
+            if (Object.hasOwnProperty.call(state._sheets, data.sheetId) &&
+                Object.hasOwnProperty.call(state._images, data.image.id)) {
                 state._sheets[data.sheetId].images = state._sheets[data.sheetId].images.concat([data.image.id]);
                 state._images[data.image.id].sheetId = data.sheetId;
             }
         },
         removeImageFromSheet(state, data: SheetImage) {
-            if (state._sheets.hasOwnProperty(data.sheetId) && state._images.hasOwnProperty(data.image.id)) {
+            if (Object.hasOwnProperty.call(state._sheets, data.sheetId) &&
+                Object.hasOwnProperty.call(state._images, data.image.id)) {
                 const images = state._sheets[data.sheetId].images.slice();
                 if (StateMutator.removeFromArray<string>(images, ((i) => i === data.image.id))) {
                     state._sheets[data.sheetId].images = images;
                     state._images[data.image.id].sheetId = undefined;
                 }
-            }
-        },
-        addImageToWork(state: RootState, data: WorkSource) {
-            state._works[data.workId].images =
-                state._works[data.workId].images.slice().concat([data.source.id]);
-        },
-        removeImageFromWork(state: RootState, data: WorkSource) {
-            const clone = state._works[data.workId].images.slice();
-            if (StateMutator.removeFromArray<string>(clone, ((s) => s === data.source.id))) {
-                state._works[data.workId].images = clone;
             }
         },
         updateImage(state: RootState, data: Image) {

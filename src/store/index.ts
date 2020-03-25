@@ -1,13 +1,8 @@
 import Vuex, {ActionContext, ActionTree, GetterTree, MutationTree, Store} from 'vuex';
 import Vue from 'vue';
-import {AudioRecording} from '@/data/AudioRecording';
-import {TextSource} from '@/data/TextSource';
-import {WorkSource} from '@/types';
 import {Measure} from '@/data/Measure';
-import {StoreImage, StoreSheet, StoreWork} from '@/data/store';
-import {Instrument} from '@/data/Instrument';
+import {StoreImage, StoreSheet} from '@/data/store';
 import {MeasureStore} from '@/store/MeasureStore';
-import {WorkStore} from '@/store/WorkStore';
 import {StoreType} from '@/store/StoreType';
 import {SheetStore} from '@/store/SheetStore';
 import {Segment} from '@/data/Segment';
@@ -16,7 +11,6 @@ import {ImageStore} from '@/store/ImageStore';
 import {MEIParser} from '@/MEI';
 import {Sheet} from '@/data/Sheet';
 import {Image} from '@/data/Image';
-import {Vector2} from '@/data/geometry/Vector2';
 
 Vue.use(Vuex);
 
@@ -46,11 +40,8 @@ export enum Mutations {
 export interface RootState {
     _sheets: { [id: string]: StoreSheet };
     _images: { [id: string]: StoreImage };
-    _works: { [id: string]: StoreWork };
     _measures: { [id: string]: Measure };
     _segments: { [id: string]: Segment };
-    _texts: { [id: string]: TextSource };
-    _recordings: { [id: string]: AudioRecording };
     headline: string;
     currentEntity: string;
 }
@@ -79,40 +70,6 @@ const mutations: MutationTree<RootState> = dataStores.reduce((acc, store) => {
 const actions: ActionTree<RootState, RootState> = dataStores.reduce((acc, store) => {
     return Object.assign(acc, store.actions);
 }, {
-    addSourceToWork(ctx: ActionContext<RootState, RootState>, data: WorkSource) {
-        if (!ctx.state._works.hasOwnProperty(data.workId)) {
-            return new Promise((resolve, reject) => reject(new Error('Cannot find work with id ' + data.workId)));
-        }
-        switch (data.source.type) {
-            case 'sheet':
-                return ctx.dispatch('addSheetToWork', data);
-            case 'image':
-                return ctx.dispatch('addImageToWork', data);
-            case 'audio':
-                return ctx.dispatch('addRecordingToWork', data);
-            case 'text':
-                return ctx.dispatch('addTextToWork', data);
-            default:
-                throw new Error('addSourceToWork has no handler for ' + data.source.type);
-        }
-    },
-    removeSourceFromWork(ctx: ActionContext<RootState, RootState>, data: WorkSource) {
-        if (!ctx.state._works.hasOwnProperty(data.workId)) {
-            return;
-        }
-        switch (data.source.type) {
-            case 'sheet':
-                return ctx.dispatch('removeSheetFromWork', data);
-            case 'image':
-                return ctx.dispatch('removeImageFromWork', data);
-            case 'audio':
-                return ctx.dispatch('removeRecordingFromWork', data);
-            case 'text':
-                return ctx.dispatch('removeTextFromWork', data);
-            default:
-                throw new Error('deleteSourceFromWork has no handler for ' + data.source.type);
-        }
-    },
     fetchMEIFromURL(ctx: ActionContext<RootState, RootState>, url: string) {
         return new Promise((resolve, reject) => {
             fetch(url).then((response) => {
@@ -132,6 +89,25 @@ const actions: ActionTree<RootState, RootState> = dataStores.reduce((acc, store)
             });
         });
     },
+    fetchMEIFromFile(ctx: ActionContext<RootState, RootState>, file: File) {
+        return new Promise((resolve, reject) => {
+
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const sheetName = file.name;
+                const text = reader.result;
+
+                ctx.dispatch ('loadMEI', {text, sheetName}).then((value) => {
+                    resolve(value);
+                }).catch((reason) => {
+                    reject(reason);
+                });
+            };
+
+            reader.readAsText(file);
+        });
+    },
+    // eslint-disable-next-line
     loadMEI(ctx: ActionContext<RootState, RootState>, data: {text: string, sheetName: string}) {
         return new Promise((resolve) => {
             const mei = MEIParser.parse(data.text);
@@ -146,7 +122,7 @@ const actions: ActionTree<RootState, RootState> = dataStores.reduce((acc, store)
                         const storedImages = ctx.getters.images;
                         const imageId = surface.graphic.id || surface.graphic.target;
                         let image: Image;
-                        if (!storedImages.hasOwnProperty(imageId)) {
+                        if (!Object.hasOwnProperty.call(storedImages, imageId)) {
                             // see if the target looks like a URL, and if so directly load it
                             const imagepath =
                                 (surface.graphic.target.indexOf('://') > -1 || surface.graphic.target.startsWith('/'))
@@ -199,11 +175,8 @@ const storeInstance = new Store<RootState>({
     state: {
         _sheets: {},
         _images: {},
-        _works: {},
         _measures: {},
         _segments: {},
-        _texts: {},
-        _recordings: {},
         headline: 'Bibliothek',
         currentEntity: '',
     },
@@ -211,10 +184,13 @@ const storeInstance = new Store<RootState>({
     mutations,
     actions,
 });
-const dummy = async () => {
+
+/*const dummy = async () => {
     await storeInstance.dispatch('fetchMEIFromURL', '/data/an-die-ferne-geliebte.xml');
     await storeInstance.dispatch('fetchMEIFromURL', '/data/moellersche-handschrift.xml');
     await storeInstance.dispatch('fetchMEIFromURL', '/data/Op.111_A.xml');
 };
 dummy().catch((error) => console.error({error}));
+ */
+
 export default storeInstance;

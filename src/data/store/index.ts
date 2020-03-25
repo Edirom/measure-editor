@@ -3,4 +3,3 @@
 
 export { StoreImage } from './StoreImage';
 export { StoreSheet } from './StoreSheet';
-export { StoreWork } from './StoreWork';
