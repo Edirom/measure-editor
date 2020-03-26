@@ -10,9 +10,9 @@ export class Sheet implements Source {
     public get displayName(): string {
         return this.name + (this.signature ? ' [' + this.signature + ']' : '');
     }
-    public year: string = '';
-    public signature: string = '';
-    public description: string = '';
+    public year = '';
+    public signature = '';
+    public description = '';
     public images: Image[] = [];
     public segments: Segment[] = [];
     public parentMEI?: MEI;

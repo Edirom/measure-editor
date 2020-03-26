@@ -1,6 +1,8 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+
 import Vue from 'vue';
 
-interface StateRootLevel<T> { [id: number]: T; }
+interface StateRootLevel<T> { [id: number]: T }
 
 export class StateMutator {
     public static stateDelete<T>(entities: StateRootLevel<T>, id: string): void {
@@ -9,7 +11,7 @@ export class StateMutator {
     }
 
     public static stateAdd<T>(entities: StateRootLevel<T>, id: string, element: T): void {
-        if (entities.hasOwnProperty(id)) {
+        if (Object.hasOwnProperty.call(entities, id)) {
             return;
         }
         Vue.set((entities as any), id, element);

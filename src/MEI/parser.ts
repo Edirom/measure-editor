@@ -19,7 +19,7 @@ export class MEIParser {
                             for (const measure of section.measures) {
                                 const ids = measure.facs.split(' ').map((id) => id.substr(1));
                                 for (const id of ids) {
-                                    if (zonesById.hasOwnProperty(id)) {
+                                    if (Object.hasOwnProperty.call(zonesById, id)) {
                                         zonesById[id].measures.push(measure);
                                     } else {
                                         console.warn('ID', id, 'of measure', measure.id, 'does not exist');

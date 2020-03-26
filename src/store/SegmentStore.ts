@@ -18,14 +18,14 @@ export class SegmentStore implements StoreType<RootState> {
     };
     public mutations: MutationTree<RootState> = {
         addSegmentToSheet(state: RootState, data: SheetSegment) {
-            if (state._sheets.hasOwnProperty(data.sheetId)) {
+            if (Object.hasOwnProperty.call(state._sheets, data.sheetId)) {
                 StateMutator.stateAdd<Segment>(state._segments, data.segment.id, data.segment);
                 state._sheets[data.sheetId].segments =
                     state._sheets[data.sheetId].segments.slice().concat([data.segment.id]);
             }
         },
         removeSegmentFromSheet(state: RootState, data: SheetSegment) {
-            if (state._sheets.hasOwnProperty(data.sheetId)) {
+            if (Object.hasOwnProperty.call(state._sheets, data.sheetId)) {
                 StateMutator.removeFromArray(state._sheets[data.sheetId].segments,
                     (s: string) => s === data.segment.id);
                 state._sheets[data.sheetId].mutate();

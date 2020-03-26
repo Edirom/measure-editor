@@ -15,7 +15,7 @@ enum ChangeMode {
 
 export class EditTool extends EditorTool {
 
-    private startValue: number = 0;
+    private startValue = 0;
     private elementId: string | null = null;
     private changeMode: ChangeMode = ChangeMode.None;
 
@@ -216,8 +216,7 @@ export class EditTool extends EditorTool {
             centerY + gizmoHeightOver2, centerX + gizmoWidthOver2, gizmoColor);
     }
 
-    private createRectangle(id: string, top: number, left: number, bottom: number, right: number, color: RGB)
-        : PrimitiveElement {
+    private createRectangle(id: string, top: number, left: number, bottom: number, right: number, color: RGB): PrimitiveElement {
         return new PrimitiveElement(id, '', color,
             [new Point(left, top), new Point(right, top), new Point(right, bottom), new Point(left, bottom)]);
     }

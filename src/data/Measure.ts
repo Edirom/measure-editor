@@ -9,7 +9,7 @@ export class Measure implements PolyContainer {
     public static colorOf(s: Segment | null | undefined): string {
         return s ? s.color : Measure.defaultColor;
     }
-    public id: string = '';
+    public id = '';
     public segmentId?: number;
     constructor(
         public name: string,
