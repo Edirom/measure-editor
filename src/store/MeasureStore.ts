@@ -1,3 +1,5 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+
 import {RootState} from '@/store';
 import {StoreType} from '@/store/StoreType';
 import {Measure} from '@/data/Measure';
@@ -8,7 +10,7 @@ import {MeasureOnSheet} from '@/types';
 import {generateUUID} from '@/data/utils';
 import {Extents, Measure as MEIMeasure, Zone} from '@/MEI/data';
 
-const extentsFromMeasure = (points: Array<{x: number, y: number}>, relativeTo: {width: number, height: number}) => {
+const extentsFromMeasure = (points: Array<{x: number; y: number}>, relativeTo: {width: number; height: number}) => {
     let maxX = -1;
     let maxY = -1;
     let minX = Infinity;
@@ -108,7 +110,7 @@ const updateMEIMeasure = (state: RootState, measure: Measure) => {
     // since we have no indication here on which sheet the measure actually resides we have to iterate
     // over all of them
     for (const sheetId in state._sheets) {
-        if (state._sheets.hasOwnProperty(sheetId)) {
+        if (Object.hasOwnProperty.call(state._sheets, sheetId)) {
             const mei = state._sheets[sheetId].parentMEI;
             // we have to update both zone and measure. The zone knows the measures it is linked by,
             // so we better iterate via the zones
@@ -140,7 +142,7 @@ export class MeasureStore implements StoreType<RootState> {
             return (ids: number[]) => {
                 const foundMeasures: Measure[] = [];
                 for (const id of ids) {
-                    if (state._measures.hasOwnProperty(id)) {
+                    if (Object.hasOwnProperty.call(state._measures, id)) {
                         foundMeasures.push(state._measures[id]);
                     }
                 }
@@ -150,9 +152,9 @@ export class MeasureStore implements StoreType<RootState> {
         measuresOnPage(state: RootState, getters: any):
             (sheetId: number, page: number) => Measure[] {
             return (sheetId: number, page: number) => {
-                if (state._sheets.hasOwnProperty(sheetId) && state._sheets[sheetId].images.length > page) {
+                if (Object.hasOwnProperty.call(state._sheets, sheetId) && state._sheets[sheetId].images.length > page) {
                     const pageId = state._sheets[sheetId].images[page];
-                    if (state._images.hasOwnProperty(pageId)) {
+                    if (Object.hasOwnProperty.call(state._images, pageId)) {
                         return getters.measuresById(state._images[pageId].measures);
                     }
                 }
@@ -265,7 +267,7 @@ export class MeasureStore implements StoreType<RootState> {
             this.remoteState = remoteState;
         } else {
             this.remoteState = {
-                create: ((measure, imageId) => {
+                create: ((measure) => {
                     measure.id = 'measure_' + generateUUID();
                     return Promise.resolve(measure);
                 }),
@@ -275,7 +277,7 @@ export class MeasureStore implements StoreType<RootState> {
                 update: ((measure) => {
                     return Promise.resolve(measure);
                 }),
-                getForImage: (imageId: string): Promise<Measure[]> => {
+                getForImage: (): Promise<Measure[]> => {
                     return Promise.resolve([]);
                 },
             };
@@ -283,11 +285,11 @@ export class MeasureStore implements StoreType<RootState> {
     }
 
     private addMeasureToSheet(state: RootState, data: MeasureOnSheet) {
-        if (state._sheets.hasOwnProperty(data.sheetId)
+        if (Object.hasOwnProperty.call(state._sheets, data.sheetId)
             && state._sheets[data.sheetId].images.length > data.page
             && data.measure.id) {
             // TODO: this is backend specific and should be removed as soon as the bootstrapping is solved
-            if (data.measure.segmentId && state._segments.hasOwnProperty(data.measure.segmentId)) {
+            if (data.measure.segmentId && Object.hasOwnProperty.call(state._segments, data.measure.segmentId)) {
                 data.measure.segment = state._segments[data.measure.segmentId];
             }
             const imageIndex = state._sheets[data.sheetId].images[data.page];
@@ -311,7 +313,7 @@ export class MeasureStore implements StoreType<RootState> {
     }
 
     private removeMeasureFromSheet(state: RootState, data: MeasureOnSheet) {
-        if (state._sheets.hasOwnProperty(data.sheetId) && state._sheets[data.sheetId].images.length > data.page) {
+        if (Object.hasOwnProperty.call(state._sheets, data.sheetId) && state._sheets[data.sheetId].images.length > data.page) {
             removeMEIMeasureFromSheet(state, data);
             const imageIndex = state._sheets[data.sheetId].images[data.page];
             StateMutator.stateDelete<Measure>(state._measures, data.measure.id);

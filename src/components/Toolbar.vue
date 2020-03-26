@@ -94,7 +94,7 @@
 
     @Component({})
     export default class Toolbar extends Vue {
-        private tool: string = 'mark';
+        private tool = 'mark';
         private lastMousePosition: Point = new Point(0, 0);
         @Prop() private staticElements!: PrimitiveElement[];
         @Prop() private dynamicElements!: PrimitiveElement[];

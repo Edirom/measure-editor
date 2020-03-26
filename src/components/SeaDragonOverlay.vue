@@ -2,6 +2,8 @@
     <div id="overlay-entry" v-on:pointermove="mouseMove" v-on:pointerdown="mouseDown" v-on:pointerup="mouseUp"></div>
 </template>
 <script lang="ts">
+    /* eslint-disable  @typescript-eslint/no-explicit-any */
+
     import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
     import {Rect, Viewer} from 'openseadragon';
     import {OverlayPointerEvent} from '@/data/geometry/OverlayPointerEvent';
@@ -213,7 +215,7 @@
             }
         }
 
-        private globalToLocalPoint(event: PointerEvent): { x: number, y: number } {
+        private globalToLocalPoint(event: PointerEvent): { x: number; y: number } {
             // transform to local coordinates
             const rect = this.$el.getBoundingClientRect();
             const offsetX = event.clientX - rect.left;

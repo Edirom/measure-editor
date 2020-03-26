@@ -4,7 +4,7 @@ class FontService {
     private loadedFonts: {[name: string]: Font} = {};
     private fontLoader = new FontLoader();
     public getFont(name: string) {
-        if (this.loadedFonts.hasOwnProperty(name)) {
+        if (Object.hasOwnProperty.call(this.loadedFonts, name)) {
             return Promise.resolve(this.loadedFonts[name]);
         }
         return new Promise<Font>((resolve, reject) => {

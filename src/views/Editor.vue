@@ -27,7 +27,7 @@
                             <pane-headline>Abschnitte</pane-headline>
                             <div class="scroll">
                                 <div v-for="segment in segments" class="mb-1" @click="selectSegment(segment)"
-                                     :class="{'active': selectedSegment === segment}">
+                                     :class="{'active': selectedSegment === segment}" v-bind:key="segment.id">
                                     <editor-segment :name="segment.name" :color="segment.color" :id="segment.id"
                                                     @name-change="changeName" @delete="deleteSegment">
                                     </editor-segment>
@@ -122,7 +122,6 @@
     library.add(faPlus);
     library.add(faSpinner);
 
-    const markerWidth = 0.5;
     const primitiveToMeasure = (element: PrimitiveElement): Measure => {
         return new Measure(element.label, {points: element.points});
     };
@@ -139,7 +138,7 @@
     })
     export default class Editor extends Vue {
         public $refs!: {
-            toolbar: Toolbar,
+            toolbar: Toolbar;
         };
         private staticElements: PrimitiveElement[] = [];
         private dynamicElements: PrimitiveElement[] = [];
@@ -149,11 +148,11 @@
         private error = false;
         private childViewer!: Viewer;
         private viewerReady = false;
-        private showModal: boolean = false;
+        private showModal = false;
         private selectedSegment: Segment | null = null;
         private editorMouseEventsEnabled = true;
         private currentEntity?: Measure;
-        private seaDragonIsLoading: boolean = false;
+        private seaDragonIsLoading = false;
 
         private get viewer(): Viewer {
             return this.childViewer;
@@ -180,9 +179,9 @@
         //     (data: MeasureSplit) => void;
         @Action('updateMeasure') private updateMeasure!: (m: Measure) => void;
         @Action(Mutations.ADD_SEGMENT_TO_SHEET) private addSegmentToSheet!:
-            (data: { segment: Segment, sheetId: string }) => void;
+            (data: { segment: Segment; sheetId: string }) => void;
         @Action(Mutations.REMOVE_SEGMENT_FROM_SHEET) private removeSegmentFromSheet!:
-            (data: { segment: Segment, sheetId: string }) => void;
+            (data: { segment: Segment; sheetId: string }) => void;
         @Action(Mutations.UPDATE_SEGMENT) private updateSegment!: (s: Segment) => void;
 
         private createMockElements() {
@@ -207,7 +206,7 @@
             if (!this.sheets) {
                 return;
             }
-            if (this.sheets.hasOwnProperty(this.id)) {
+            if (Object.hasOwnProperty.call(this.sheets, this.id)) {
                 this.sheet = this.sheets[this.id];
                 this.error = false;
                 this.segments = this.sheet.segments;
@@ -265,7 +264,7 @@
             }
         }
 
-        private changeName(event: { id: string, name: string }) {
+        private changeName(event: { id: string; name: string }) {
             const segment = this.segments.find((s) => s.id === event.id);
             if (segment) {
                 segment.name = event.name;
@@ -287,7 +286,7 @@
             });
         }
 
-        private changePrimitiveById(e: { id: string, element: PrimitiveElement }) {
+        private changePrimitiveById(e: { id: string; element: PrimitiveElement }) {
             const measure = primitiveToMeasure(e.element);
             measure.id = e.id;
             this.updateMeasure(measure);
@@ -313,7 +312,7 @@
             this.dynamicElements = this.dynamicElements.concat([element]);
         }
 
-        private changeDynamicPrimitiveById(e: { id: string, element: PrimitiveElement }) {
+        private changeDynamicPrimitiveById(e: { id: string; element: PrimitiveElement }) {
             for (let i = 0; i < this.dynamicElements.length; ++i) {
                 if (this.dynamicElements[i].id === e.id) {
                     this.dynamicElements[i] = e.element;

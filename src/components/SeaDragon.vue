@@ -11,7 +11,7 @@
     export default class SeaDragonViewer extends Vue {
         @Prop() private image!: Image;
         private seadragon!: Viewer;
-        private openedPath: string = '';
+        private openedPath = '';
         private mounted() {
             this.createSeaDragon();
         }
@@ -46,7 +46,7 @@
             });
         }
         private createTileSource(): Promise<TileSource | null> {
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve) => {
                 // detect type of tile source. no other indication than the path itself
                 let tileSource: TileSource | null = null;
                 const imagepath = this.image.imagepath.toLowerCase();
